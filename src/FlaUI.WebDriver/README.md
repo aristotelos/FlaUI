@@ -25,7 +25,48 @@ The following capabilities are supported:
 | appium:app               | The path to the application. It is also possible to set app to `Root`. In such case the session will be invoked without any explicit target application. Either this capability or `appTopLevelWindow` must be provided on session startup. | `C:\Windows\System32\notepad.exe` |
 | appium:appTopLevelWindow | The hexadecimal handle of an existing application top level window to attach to, for example `0x12345` (should be of string type). Either this capability or app must be provided on session startup.                                       | `0xC0B46`                         |
 
-## WebDriver commands
+## Getting Started
+
+Using the Selenium C# client:
+
+```C#
+using OpenQA.Selenium;
+
+public class FlaUIDriverOptions : DriverOptions
+{
+    public static FlaUIDriverOptions App(string path)
+    {
+        var options = new FlaUIDriverOptions()
+        {
+            PlatformName = "windows"
+        };
+        options.AddAdditionalOption("appium:app", path);
+        return options;
+    }
+
+	public override ICapabilities ToCapabilities()
+    {
+        return GenerateDesiredCapabilities(true);
+    }
+}
+
+var driver = new RemoteWebDriver(new Uri("http://localhost:4723"), FlaUIDriverOptions.App("C:\\YourApp.exe"))
+```
+
+Using the WebdriverIO JavaScript client:
+
+```JavaScript
+import { remote } from 'webdriverio'
+
+const driver = await remote({
+    capabilities: {
+        platformName: 'windows',
+        'appium:app': 'C:\\YourApp.exe'
+    }
+});
+```
+
+## WebDriver Commands
 
 | Method | URI Template                                                   | Command                        | Implemented        | Notes |
 | ------ | -------------------------------------------------------------- | ------------------------------ | ------------------ | ----- |
@@ -40,10 +81,10 @@ The following capabilities are supported:
 | POST   | /session/{session id}/forward                                  | Forward                        |                    |       |
 | POST   | /session/{session id}/refresh                                  | Refresh                        |                    |       |
 | GET    | /session/{session id}/title                                    | Get Title                      |                    |       |
-| GET    | /session/{session id}/window                                   | Get Window Handle              |                    |       |
+| GET    | /session/{session id}/window                                   | Get Window Handle              | :white_check_mark: |       |
 | DELETE | /session/{session id}/window                                   | Close Window                   | :white_check_mark: |       |
-| POST   | /session/{session id}/window                                   | Switch To Window               |                    |       |
-| GET    | /session/{session id}/window/handles                           | Get Window Handles             |                    |       |
+| POST   | /session/{session id}/window                                   | Switch To Window               | :white_check_mark: |       |
+| GET    | /session/{session id}/window/handles                           | Get Window Handles             | :white_check_mark: |       |
 | POST   | /session/{session id}/window/new                               | New Window                     |                    |       |
 | POST   | /session/{session id}/frame                                    | Switch To Frame                |                    |       |
 | POST   | /session/{session id}/frame/parent                             | Switch To Parent Frame         |                    |       |

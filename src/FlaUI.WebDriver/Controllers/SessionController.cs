@@ -107,7 +107,7 @@ namespace FlaUI.WebDriver.Controllers
             var session = GetSession(sessionId);
             if (session.App != null && !session.App.HasExited)
             {
-                session.App.GetMainWindow(session.Automation, TimeSpan.Zero)?.Close();
+                session.App.Close();
             }
             _sessionRepository.Delete(session);
             session.Automation.Dispose();
